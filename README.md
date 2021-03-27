@@ -1,2 +1,2 @@
 # C-Programs
-Some C programs that I created as practise 
+Some C programs that I created as practice 
