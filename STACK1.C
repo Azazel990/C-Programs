@@ -10,7 +10,7 @@ void main()
 {
 	int top,choice;
 	clrscr();
-	while(choice)
+	while(1)
 	{
 		printf("PLease enter your choice: \n 1.Push \n 2.Pop \n");
 		scanf("%d",&choice);
