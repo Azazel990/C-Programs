@@ -9,11 +9,11 @@ class solution
     public : 
         int square_root(int n)
         {
-            int l=1,r=n,mid;
+            int l=1,r=n-1,mid;
             
             while(l<=r)
             {
-                mid = (l+r-1)/2;
+                mid = (l+r)/2;
                 if(mid*mid==n)
                 {
                     return mid;
