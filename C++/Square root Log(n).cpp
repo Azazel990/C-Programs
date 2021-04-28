@@ -9,11 +9,12 @@ class solution
     public : 
         int square_root(int n)
         {
-            int l=1,r=n-1,mid;
+            int l=1,r=n,mid;
             
             while(l<=r)
             {
-                mid = (l+r)/2;
+                mid = (l+r-1)/2;
+                cout<<"Mid = "<<mid<<" l = "<<l<<" r = "<<r<<endl;
                 if(mid*mid==n)
                 {
                     return mid;
@@ -25,10 +26,16 @@ class solution
                 else if(mid*mid < n)
                 {
                     l = mid + 1;
+                    if(r*r==n)
+                    {
+                        return r;
+                    }
                     if(r==mid + 1)
                     {
                         return mid;
                     }
+                    
+                    
                 }
             }
         }
@@ -37,7 +44,7 @@ class solution
 int main()
 {
     solution s;
-    int n=36;
+    int n=25;
     
     cout<<"Ans = "<<s.square_root(n);
 
