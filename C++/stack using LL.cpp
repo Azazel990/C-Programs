@@ -1,3 +1,6 @@
+//Implementation of stack using Linked List 
+//Time complexity : push() => O(1), pop() => O(n)
+
 #include<iostream>
 #define max 5
 using namespace std;
@@ -80,6 +83,11 @@ class stack
             node *temp;
             temp = p;
             
+            if(count==0)
+            {
+                cout<<"Queue is Empty\n";
+                return;
+            }
             cout<<"The elements in the stack are : ";
             while(temp!=top)
             {
