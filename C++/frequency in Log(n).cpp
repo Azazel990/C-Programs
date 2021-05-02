@@ -6,12 +6,11 @@ using namespace std;
 class frequency
 {
     private : 
-        int c,flag; //record the count;
+        int c; //record the count;
     public : 
         frequency()
         {
             c = 0;
-            flag = 0;
         }
         int solution(int arr[],int n,int x)
         {
