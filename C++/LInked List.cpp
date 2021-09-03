@@ -1,4 +1,3 @@
-//linkded list in c++ 
 #include<iostream>
 using namespace std;
 
@@ -92,7 +91,20 @@ class linklist
             delete temp1;
             
         }
-        
+        void reverse()
+        {
+            node *temp,*prev = NULL,*next,*current;
+            
+            current = p;
+            while(current!=NULL)
+            {
+                next = current->link;
+                current->link = prev;
+                prev = current;
+                current = next;
+            }
+            p = prev;
+        }
         void display()
         {
             node *temp;
@@ -131,7 +143,7 @@ int main()
     int num,n,c;
     while(1)
     {
-        cout<<"Please Choose your operation : \n1.Addnode at begining\n2.Append node\n3.Count nodes\n4.Add node in middle\n5.Delete node\n6.Display\n7.Exit\n";
+        cout<<"Please Choose your operation : \n1.Addnode at begining\n2.Append node\n3.Count nodes\n4.Add node in middle\n5.Delete node\n6.Display\n7.Reverse the Link List\n8.Exit\n";
         cin>>c;
         switch(c)
         {
@@ -158,7 +170,9 @@ int main()
             case 6 : cout<<"Current Linked list : \n";
                      l.display();
                         break;
-            case 7 : exit(0);
+            case 7 : l.reverse();
+                    break;
+            case 8 : exit(0);
         }
     }
     return 0;
