@@ -132,7 +132,7 @@ void Postorder(struct Node *root)
 }
 int LevelOrder(struct Node *root,int flag)
 {
-    int count = 0;
+    int count = 0,c=0;
     if(root==NULL) return count;
     
     queue<Node *> q;
@@ -153,9 +153,10 @@ int LevelOrder(struct Node *root,int flag)
             q.push(temp->right);
             count++;
         }
-        
+        if(temp->left&&temp->right) c++;
     }
-    return count;
+    if(flag==0) return count;
+    return c;
 }
 
 int LeafNodes(struct Node* root)
@@ -179,6 +180,64 @@ int Height(struct Node * root)
     return 1 + max(l,r);
 }
 
+void LeftView(struct Node* root)
+{
+    if(root==NULL) return ;
+
+    queue<Node*> q;
+    q.push(root);
+    q.push(NULL);
+    while (!q.empty())
+    {
+        Node *temp = q.front();
+        
+        if(temp) 
+        {
+            cout<<temp->data<<" ";
+            while(q.front()!=NULL)
+            {
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+
+                q.pop();
+                temp = q.front();
+            }
+            q.push(NULL);
+        }
+        q.pop();       
+    }  
+}
+
+void RightView(struct Node* root)
+{
+    if(root==NULL) return ;
+
+    queue<Node*> q;
+    q.push(root);
+    q.push(NULL);
+    
+    while(!q.empty())
+    {
+        Node *temp = q.front();
+
+        if(temp)
+        {
+            while(q.front()!=NULL)
+            {
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+
+                q.pop();
+
+                if(q.front()==NULL) cout<<temp->data<<" ";
+
+                temp = q.front();
+            }
+            q.push(NULL);
+        }
+        q.pop();
+    }
+}
 int main()
 {
   root = NULL;
@@ -186,7 +245,7 @@ int main()
     
     while(1)
     {
-        cout<<"Please Enter Your Choice... \n1.Insert new node\n2.Delete Node\n3.Preorder Traversal\n4.Inorder Traversal\n5.Postorder Traversal\n6.Levelorder Traversal\n7.Count Nodes\n8.Count Leaf Nodes\n9.Count Non-Leaf Nodes\n10.Height of the tree\n";
+        cout<<"Please Enter Your Choice... \n1.Insert new node\n2.Delete Node\n3.Preorder Traversal\n4.Inorder Traversal\n5.Postorder Traversal\n6.Levelorder Traversal\n7.Count Nodes\n8.Count Leaf Nodes\n9.Count Non-Leaf Nodes\n10.Height of the tree\n11.Count Full Nodes\n12.Left View\n13.Right View\n";
         cin>>choice;
         switch(choice)
         {
@@ -218,6 +277,15 @@ int main()
                      break;
             case 10 : cout<<Height(root)<<"\n";
                       break;
+            case 11 : cout<<LevelOrder(root,2)<<"\n";
+                     break;
+            case 12 : LeftView(root);
+                      cout<<endl;
+                      break;
+            case 13 : RightView(root);
+                      cout<<endl;
+                      break;
+               
             default : exit(0);
         }
     }
