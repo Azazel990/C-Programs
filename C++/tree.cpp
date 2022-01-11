@@ -15,6 +15,47 @@ struct Node
     }
 }*root,*last;
  
+int LevelOrder(struct Node *root,int flag)
+{
+    int count = 0,c=0;
+    if(root==NULL) return count;
+    
+    queue<Node *> q;
+    q.push(root);
+    count++;
+    while(!q.empty())
+    {
+        Node *temp = q.front();
+        if(flag==1) cout<<temp->data<<" ";
+        q.pop();
+        if(flag==3)
+        {
+            if(temp->left==last) temp->left = NULL;
+            else if(temp->right==last) temp->right = NULL;
+
+            if(q.size()==0&&temp!=root)
+            {
+                last = temp;
+                return 0;
+            }
+        }
+      
+        
+        if(temp->left!=NULL) 
+        {
+            q.push(temp->left);
+            count++;
+        }
+        if(temp->right!=NULL){
+            q.push(temp->right);
+            count++;
+        }
+        if(temp->left&&temp->right) c++;
+    }
+    if(flag==0) return count;
+    else if(flag==3) return last->data;
+    return c;
+}
 
 void InsertNode(int num)
 {
@@ -55,53 +96,52 @@ void Delete(int num)
 {
     queue<Node *> q;
     q.push(root);
-    
-    while(!q.empty())
+    int flag = 0;
+    if(last->data==num) flag = 2;
+    Node *temp = q.front();
+    while(!q.empty()&&!flag)
     {
-        Node *temp = q.front();
-        
-        if(temp->data==num)
+        if(temp->data==num) break;
+
+        if(temp->left->data==num)
         {
-            if(temp->left==NULL&&temp->right==NULL) 
-            {
-                temp==NULL;
-                return;
-            }
-            else
-            {
-                temp->data = last->data;
-                while(!q.empty()) q.pop();
-                
-                q.push(root);
-                while(!q.empty())
-                {
-                    Node *temp1 = q.front();
-                    if(temp1->left!=NULL) 
-                    {
-                        if(temp1->left==last)
-                        {
-                            last = NULL;
-                            last = temp1->left;
-                            return;
-                        }
-                        else q.push(temp1->left);
-                    }
-                    if(temp1->right!=NULL)
-                    {
-                        if(temp1->right==last)
-                        {
-                            last = NULL;
-                            last = temp1->right;
-                            return;
-                        }
-                        else q.push(temp1->right);
-                    }
-                    q.pop();
-                }
-            }
+            if(temp->left->left==NULL&&temp->right->right==NULL)
+            { 
+                temp->left = NULL;
+                return ; 
+            }  
+            flag = 1;
+            temp = temp->left;
+            break;
         }
-        
+        else if(temp->right->data==num)
+        {
+            if(temp->right->left==NULL&&temp->right->right==NULL) 
+            {
+                temp->right = NULL;
+                return ;
+            }
+            flag = 1;
+            temp = temp->right;
+            break;
+        }
+        else
+        {
+            if(temp->left) q.push(temp->left);
+            if(temp->right) q.push(temp->right);
+        }
+
+        q.pop();        
+        temp = q.front();
     }
+
+    if(flag==1)
+    {
+         temp->data = last->data;
+         LevelOrder(root,3);
+    }
+    else if(flag==2) LevelOrder(root,3);
+    
 }
 void Preorder(struct Node* root)
 {
@@ -129,34 +169,6 @@ void Postorder(struct Node *root)
     Postorder(root->left);
     Postorder(root->right);
     cout<<root->data<<" ";
-}
-int LevelOrder(struct Node *root,int flag)
-{
-    int count = 0,c=0;
-    if(root==NULL) return count;
-    
-    queue<Node *> q;
-    q.push(root);
-    count++;
-    while(!q.empty())
-    {
-        Node *temp = q.front();
-        if(flag==1) cout<<temp->data<<" ";
-        q.pop();
-        
-        if(temp->left!=NULL) 
-        {
-            q.push(temp->left);
-            count++;
-        }
-        if(temp->right!=NULL){
-            q.push(temp->right);
-            count++;
-        }
-        if(temp->left&&temp->right) c++;
-    }
-    if(flag==0) return count;
-    return c;
 }
 
 int LeafNodes(struct Node* root)
@@ -238,6 +250,71 @@ void RightView(struct Node* root)
         q.pop();
     }
 }
+
+string check(struct Node *root){
+    return ((LevelOrder(root,0) -  LevelOrder(root,2) - LeafNodes(root)) ? "NO" : "YES" );
+}
+
+void SpiralForm(struct Node *root){
+    queue<Node*> q;
+    stack<Node *> s;
+    s.push(NULL);
+    s.push(root);
+    int i = 0;
+    while(!q.empty()||!s.empty())
+    {
+        if(i%2==0)
+        {
+            Node *temp = s.top();
+            if(temp)
+            {
+                while(s.top()!=NULL){
+                    cout<<temp->data<<" ";
+                    if(temp->left) q.push(temp->left);
+                    if(temp->right) q.push(temp->right);
+                    s.pop();
+                    temp = s.top();
+                }
+                if(!q.empty()) q.push(NULL);
+                s.pop();
+            }
+        }
+             else
+            {
+                Node *temp = q.front();
+               if(temp)
+               {
+                    s.push(NULL);
+                while(q.front()!=NULL){
+                    cout<<temp->data<<" ";
+                    if(temp->left) s.push(temp->left);
+                    if(temp->right) s.push(temp->right);
+                    q.pop();
+                    temp = q.front();
+                }
+                q.pop();
+               }
+              if(s.top()==NULL) s.pop();
+            }
+           i++;
+        }
+       
+}
+
+void MirrorTree(struct Node* root)
+{
+    if(root==NULL) return ;
+    
+    struct Node *temp ;
+
+    MirrorTree(root->left);
+    MirrorTree(root->right);
+
+    temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+}
+
 int main()
 {
   root = NULL;
@@ -245,7 +322,7 @@ int main()
     
     while(1)
     {
-        cout<<"Please Enter Your Choice... \n1.Insert new node\n2.Delete Node\n3.Preorder Traversal\n4.Inorder Traversal\n5.Postorder Traversal\n6.Levelorder Traversal\n7.Count Nodes\n8.Count Leaf Nodes\n9.Count Non-Leaf Nodes\n10.Height of the tree\n11.Count Full Nodes\n12.Left View\n13.Right View\n";
+        cout<<"Please Enter Your Choice... \n1.Insert new node\n2.Delete Node\n3.Preorder Traversal\n4.Inorder Traversal\n5.Postorder Traversal\n6.Levelorder Traversal\n7.Count Nodes\n8.Count Leaf Nodes\n9.Count Non-Leaf Nodes\n10.Height of the tree\n11.Count Full Nodes\n12.Left View\n13.Right View\n14.Check if Complete Binary Tree\n15.Spiral Form\n16.Mirror Tree\n";
         cin>>choice;
         switch(choice)
         {
@@ -256,6 +333,7 @@ int main()
             case 2 : cout<<"Please Enter the data to be deleted : ";
                      cin>>num;
                      Delete(num);
+                     cout<<endl;
                      break;
             case 3 : Preorder(root);
                       cout<<endl;
@@ -285,7 +363,14 @@ int main()
             case 13 : RightView(root);
                       cout<<endl;
                       break;
-               
+            case 14 : cout<<check(root)<<"\n";
+                      break;
+            case 15 : SpiralForm(root);
+                      cout<<endl;
+                      break;
+            case 16 : MirrorTree(root);
+                      cout<<endl;
+                       break;
             default : exit(0);
         }
     }
